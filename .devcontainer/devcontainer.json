@@ -1,0 +1,46 @@
+// https://aka.ms/devcontainer.json
+{
+  "name": "dind-k8s-airflow",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+
+  // Docker-in-Docker: runs its own isolated Docker Engine inside the container.
+  // Preferred over DooD (Docker-outside-of-Docker) on Mac M-series because
+  // DooD requires a socat tunnel to expose ports; DinD makes forwardPorts work directly.
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "dockerDashComposeVersion": "v2"
+    },
+    // kubectl only — Kind and Astronomer CLI are installed via install.sh.
+    // The kubectl-helm-minikube feature is used solely for kubectl + Helm;
+    // minikube is disabled because Kind is better suited for running inside Docker.
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "version": "latest",
+      "helm": "4.0.5",
+      "minikube": "none"
+    }
+  },
+
+  // Run install.sh once after the container image is built (tools installation).
+  // Run setup.sh once after the container starts (cluster creation, config).
+  "onCreateCommand": "bash .devcontainer/scripts/install.sh",
+  "postStartCommand": "bash .devcontainer/scripts/setup.sh && astro version",
+
+  // Forward only port 8080 for the Airflow UI.
+  // autoForwardPorts is disabled to avoid noise from other processes.
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Airflow UI",
+      "onAutoForward": "ignore"
+    }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
+
+  // vscode is the default non-root user provided by the base image.
+  // Running as non-root is sufficient because DinD grants Docker access via the
+  // docker group; root is not required.
+  "remoteUser": "root"
+}

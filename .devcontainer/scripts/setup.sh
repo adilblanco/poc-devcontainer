@@ -3,6 +3,9 @@
 # Starts the Minikube cluster and configures the environment for Airflow.
 set -euo pipefail
 
+# Resolved from workspaceFolder in devcontainer.json — avoids repeating $(pwd).
+WORKSPACE_DIR=$(pwd)
+
 echo "==> Waiting for Docker Engine (DinD) to be ready"
 until docker info &>/dev/null; do sleep 1; done
 
@@ -21,13 +24,13 @@ else
 fi
 
 echo "==> Writing kubeconfig for Airflow containers"
-mkdir -p /workspaces/poc-devcontainer/include/.kube
+mkdir -p ${WORKSPACE_DIR}/include/.kube
 # Use minikube IP directly — reachable from Airflow containers once connected
 # to the same Docker network. The hostname approach requires extra DNS setup.
 MINIKUBE_IP=$(minikube ip)
-kubectl config view --flatten > /workspaces/poc-devcontainer/include/.kube/config
+kubectl config view --flatten > ${WORKSPACE_DIR}/include/.kube/config
 sed -i "s|server: https://[0-9.]*:[0-9]*|server: https://${MINIKUBE_IP}:8443|g" \
-  /workspaces/poc-devcontainer/include/.kube/config
+  ${WORKSPACE_DIR}/include/.kube/config
 echo "    Minikube API server: https://${MINIKUBE_IP}:8443"
 
 echo "==> Registering Docker context aliases in ~/.bashrc"

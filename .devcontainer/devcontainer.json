@@ -22,6 +22,8 @@
     }
   },
 
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
   // Run install.sh once after the container image is built (tools installation).
   // Run setup.sh once after the container starts (cluster creation, config).
   "onCreateCommand": "bash .devcontainer/scripts/install.sh",
@@ -30,14 +32,19 @@
   // Forward only port 8080 for the Airflow UI.
   // autoForwardPorts is disabled to avoid noise from other processes.
   "forwardPorts": [8080],
-  "portsAttributes": {
-    "8080": {
-      "label": "Airflow UI",
-      "onAutoForward": "ignore"
-    }
-  },
   "otherPortsAttributes": {
     "onAutoForward": "ignore"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylint",
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
   },
 
   // vscode is the default non-root user provided by the base image.

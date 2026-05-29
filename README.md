@@ -37,6 +37,7 @@ The build automatically:
 ### 2. Start Airflow
 
 ```bash
+use-dind
 astro dev start
 ```
 
@@ -47,7 +48,7 @@ can reach the Minikube API at `192.168.49.2:8443`.
 
 ```bash
 use-dind
-for c in $(docker ps --format '{{.Names}}' | grep poc-devcontainer); do
+for c in $(docker ps --format '{{.Names}}' | grep "$(basename $(pwd))"); do
   docker network connect minikube $c 2>/dev/null || true
 done
 ```
@@ -81,6 +82,7 @@ Always stop Airflow before rebuilding — Airflow containers stay attached to
 the `minikube` Docker network and block Minikube from restarting.
 
 ```bash
+use-dind
 astro dev stop
 # Ctrl+Shift+P → Dev Containers: Rebuild Container
 ```

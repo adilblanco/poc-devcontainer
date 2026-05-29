@@ -1,7 +1,7 @@
 // https://aka.ms/devcontainer.json
 {
   "name": "dind-k8s-airflow",
-  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
 
   // Docker-in-Docker: runs its own isolated Docker Engine inside the container.
   // Preferred over DooD (Docker-outside-of-Docker) on Mac M-series because
@@ -11,13 +11,14 @@
       "version": "latest",
       "dockerDashComposeVersion": "v2"
     },
-    // kubectl only — Kind and Astronomer CLI are installed via install.sh.
-    // The kubectl-helm-minikube feature is used solely for kubectl + Helm;
-    // minikube is disabled because Kind is better suited for running inside Docker.
+    // kubectl, Helm, and Minikube come from this feature.
+    // Minikube is preferred over Kind because eval $(minikube docker-env) makes
+    // every image built or pulled in the DevContainer directly available in the
+    // cluster — no manual 'kind load docker-image' step needed.
     "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
       "version": "latest",
       "helm": "4.0.5",
-      "minikube": "none"
+      "minikube": "latest"
     }
   },
 

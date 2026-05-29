@@ -9,3 +9,7 @@ airflow-webserver.pid
 webserver_config.py
 airflow.cfg
 airflow.db
+
+# include/ content is auto-generated at DevContainer startup — do not track
+include/*
+!include/.gitkeep

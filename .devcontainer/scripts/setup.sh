@@ -47,6 +47,8 @@ alias use-dind='unset DOCKER_HOST DOCKER_TLS_VERIFY DOCKER_CERT_PATH MINIKUBE_AC
 EOF
 
 echo "==> Configuring Astronomer CLI for local development"
+# Disable telemetry to prevent Astronomer CLI from sending usage data to
+# Astronomer's servers — recommended in a corporate environment.
 astro config set -g disable_telemetry true 2>/dev/null || true
 
 echo "==> setup.sh done"

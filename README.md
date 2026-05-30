@@ -76,11 +76,12 @@ use-dind
 astro dev restart
 ```
 
-## IDE autocomplete for DAGs
+## Python dependencies for DAG development
 
-Install Airflow packages system-wide in the DevContainer (no virtualenv needed —
-the container is already an isolated environment). Use `--no-deps` to avoid a
-lengthy installation of the full dependency tree.
+Install Airflow packages system-wide in the DevContainer so that VS Code resolves
+imports in DAGs without errors (e.g. `from airflow.providers.cncf.kubernetes...`).
+No virtualenv needed — the DevContainer is already an isolated environment.
+Use `--no-deps` to avoid installing the full dependency tree.
 
 ```bash
 pip install apache-airflow-providers-cncf-kubernetes --no-deps

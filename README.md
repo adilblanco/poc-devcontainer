@@ -34,14 +34,29 @@ The build automatically:
 - Starts Minikube (driver: docker)
 - Generates `include/.kube/config` pointing to Minikube API
 
-### 2. Start Airflow
+### 2. Install Python dependencies for DAG development
+
+Install Airflow packages system-wide in the DevContainer so that VS Code resolves
+imports in DAGs without errors (e.g. `from airflow.providers.cncf.kubernetes...`).
+No virtualenv needed — the DevContainer is already an isolated environment.
+Use `--no-deps` to avoid installing the full dependency tree.
+
+```bash
+use-dind
+pip install apache-airflow-providers-cncf-kubernetes --no-deps
+```
+
+Then point VS Code to the system interpreter:
+`Ctrl+Shift+P` → **Python: Select Interpreter** → `/usr/bin/python3`
+
+### 3. Start Airflow
 
 ```bash
 use-dind
 astro dev start
 ```
 
-### 3. Connect Airflow to the Minikube network
+### 4. Connect Airflow to the Minikube network
 
 Required once after each `astro dev start` so that `KubernetesPodOperator`
 can reach the Minikube API at `192.168.49.2:8443`.
@@ -53,7 +68,7 @@ for c in $(docker ps --format '{{.Names}}' | grep "$(basename $(pwd))"); do
 done
 ```
 
-### 4. Open Airflow UI
+### 5. Open Airflow UI
 
 http://localhost:8080 — login: `admin` / `admin`
 
@@ -75,20 +90,6 @@ docker build -t my-image:1.0 .
 use-dind
 astro dev restart
 ```
-
-## Python dependencies for DAG development
-
-Install Airflow packages system-wide in the DevContainer so that VS Code resolves
-imports in DAGs without errors (e.g. `from airflow.providers.cncf.kubernetes...`).
-No virtualenv needed — the DevContainer is already an isolated environment.
-Use `--no-deps` to avoid installing the full dependency tree.
-
-```bash
-pip install apache-airflow-providers-cncf-kubernetes --no-deps
-```
-
-Then point VS Code to the system interpreter:
-`Ctrl+Shift+P` → **Python: Select Interpreter** → `/usr/bin/python3`
 
 ## Rebuild DevContainer
 

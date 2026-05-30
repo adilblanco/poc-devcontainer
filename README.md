@@ -76,6 +76,19 @@ use-dind
 astro dev restart
 ```
 
+## IDE autocomplete for DAGs
+
+Install Airflow packages system-wide in the DevContainer (no virtualenv needed —
+the container is already an isolated environment). Use `--no-deps` to avoid a
+lengthy installation of the full dependency tree.
+
+```bash
+pip install apache-airflow-providers-cncf-kubernetes --no-deps
+```
+
+Then point VS Code to the system interpreter:
+`Ctrl+Shift+P` → **Python: Select Interpreter** → `/usr/bin/python3`
+
 ## Rebuild DevContainer
 
 Always stop Airflow before rebuilding — Airflow containers stay attached to
